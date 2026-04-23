@@ -2849,6 +2849,146 @@
       color: var(--text-secondary);
       font-style: normal;
     }
+
+    /* ============================================================
+       WICKED PROBLEM INTERACTIVE MAP
+    ============================================================ */
+    .wmap-section {
+      background: rgba(0,0,0,0.025);
+      border-top: 1px solid var(--divider);
+      border-bottom: 1px solid var(--divider);
+    }
+
+    .wmap-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .wmap-filter {
+      font-family: var(--font-en);
+      font-size: 12px;
+      padding: 5px 14px;
+      border: 1px solid var(--divider);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .wmap-filter:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+    .wmap-filter.active {
+      background: var(--text-primary);
+      color: var(--bg);
+      border-color: var(--text-primary);
+    }
+    .wmap-filter[data-layer="ling"].active   { background: var(--amber); border-color: var(--amber); }
+    .wmap-filter[data-layer="stake"].active  { background: #9A6678; border-color: #9A6678; }
+    .wmap-filter[data-layer="inev"].active   { background: #6A7A9A; border-color: #6A7A9A; }
+
+    .wmap-diagram {
+      width: 100%;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    #wmap-svg {
+      width: 100%;
+      max-width: 820px;
+      display: block;
+      overflow: visible;
+    }
+
+    /* SVG node circles */
+    .wmap-circle {
+      stroke-width: 1.5;
+      transition: fill 0.15s, stroke-width 0.15s;
+    }
+    .wmap-circle-center { stroke: var(--accent);  fill: rgba(74,122,109,0.12); }
+    .wmap-circle-ling   { stroke: var(--amber);   fill: rgba(196,149,74,0.10); }
+    .wmap-circle-stake  { stroke: #9A6678;         fill: rgba(154,102,120,0.10); }
+    .wmap-circle-inev   { stroke: #6A7A9A;         fill: rgba(106,122,154,0.10); }
+
+    .wmap-node { cursor: pointer; }
+    .wmap-node:hover .wmap-circle  { stroke-width: 2.5; }
+    .wmap-active .wmap-circle-center { fill: rgba(74,122,109,0.28);  stroke-width: 3; }
+    .wmap-active .wmap-circle-ling   { fill: rgba(196,149,74,0.28);  stroke-width: 3; }
+    .wmap-active .wmap-circle-stake  { fill: rgba(154,102,120,0.28); stroke-width: 3; }
+    .wmap-active .wmap-circle-inev   { fill: rgba(106,122,154,0.28); stroke-width: 3; }
+
+    /* SVG text */
+    .wmap-label-in {
+      font-family: var(--font-en);
+      font-size: 8.5px;
+      fill: var(--text-primary);
+      pointer-events: none;
+      dominant-baseline: middle;
+    }
+    .wmap-label-cluster {
+      font-family: var(--font-en);
+      font-size: 9.5px;
+      fill: var(--text-primary);
+      pointer-events: none;
+    }
+    .wmap-label-child {
+      font-family: var(--font-en);
+      font-size: 8.5px;
+      fill: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    /* SVG edges */
+    .wmap-edge {
+      stroke: var(--divider);
+      stroke-width: 1;
+      fill: none;
+      transition: opacity 0.2s;
+    }
+    .wmap-edge-main  { stroke-width: 1.5; opacity: 0.6; }
+    .wmap-edge-child { opacity: 0.45; }
+    .wmap-edge-cross { stroke-dasharray: 4 3; opacity: 0.25; stroke: var(--text-secondary); }
+
+    /* Detail panel */
+    .wmap-detail {
+      min-height: 72px;
+      padding: 18px 22px;
+      background: var(--white);
+      border: 1px solid var(--divider);
+      border-radius: 2px;
+      transition: border-color 0.2s;
+    }
+    .wmap-detail-hint {
+      font-family: var(--font-en);
+      font-size: 13px;
+      color: var(--muted-label);
+      text-align: center;
+      margin: 12px 0;
+    }
+    .wmap-dtag {
+      font-family: var(--font-en);
+      font-size: 10px;
+      border: 1px solid;
+      padding: 2px 8px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .wmap-dtitle {
+      font-family: var(--font-en);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+    .wmap-dbody {
+      font-family: var(--font-en);
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin: 0;
+    }
   </style>
 </head>
 <body class="show-en">
@@ -3619,6 +3759,161 @@
 
       <p class="gen-closing" style="font-family: var(--font-en);">Across three generations, the thread of transmission broke.</p>
     </section>
+
+    <!-- A_MAP: Three Forces Interactive Map -->
+    <section class="a-section wmap-section" id="wicked-map" aria-labelledby="wmap-heading">
+
+      <h2 class="a-header-md" id="wmap-heading">Three forces working against preservation</h2>
+      <p class="a-body-sm" style="margin-bottom:22px;">
+        The difficulty of preserving Suzhounese isn't a single problem — it's at least three, operating at the same time and reinforcing each other. Click any node to explore.
+      </p>
+
+      <div class="wmap-filters" role="group" aria-label="Filter map by theme">
+        <button class="wmap-filter active" data-layer="all">All forces</button>
+        <button class="wmap-filter" data-layer="ling">Linguistic structure</button>
+        <button class="wmap-filter" data-layer="stake">Stakeholder conflict</button>
+        <button class="wmap-filter" data-layer="inev">Inevitability question</button>
+      </div>
+
+      <div class="wmap-diagram">
+        <svg id="wmap-svg" viewBox="-10 -5 820 530" xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true" focusable="false">
+
+          <!-- ── EDGES (drawn first, behind nodes) ── -->
+          <g id="wmap-edges">
+            <!-- Center ↔ clusters (thick main spokes) -->
+            <line class="wmap-edge wmap-edge-main" data-from="center" data-to="ling"   x1="400" y1="245" x2="400" y2="100"/>
+            <line class="wmap-edge wmap-edge-main" data-from="center" data-to="stake"  x1="400" y1="245" x2="274" y2="318"/>
+            <line class="wmap-edge wmap-edge-main" data-from="center" data-to="inev"   x1="400" y1="245" x2="526" y2="318"/>
+            <!-- Ling cluster ↔ children -->
+            <line class="wmap-edge wmap-edge-child" data-from="ling" data-to="writing"  x1="400" y1="100" x2="248" y2="28"/>
+            <line class="wmap-edge wmap-edge-child" data-from="ling" data-to="tones"    x1="400" y1="100" x2="552" y2="28"/>
+            <line class="wmap-edge wmap-edge-child" data-from="ling" data-to="voiced"   x1="400" y1="100" x2="558" y2="135"/>
+            <line class="wmap-edge wmap-edge-child" data-from="ling" data-to="register" x1="400" y1="100" x2="242" y2="135"/>
+            <!-- Stake cluster ↔ children -->
+            <line class="wmap-edge wmap-edge-child" data-from="stake" data-to="parents"   x1="274" y1="318" x2="70" y2="255"/>
+            <line class="wmap-edge wmap-edge-child" data-from="stake" data-to="govtlocal" x1="274" y1="318" x2="70" y2="390"/>
+            <line class="wmap-edge wmap-edge-child" data-from="stake" data-to="lingeng"   x1="274" y1="318" x2="180" y2="448"/>
+            <line class="wmap-edge wmap-edge-child" data-from="stake" data-to="speakinst" x1="274" y1="318" x2="308" y2="448"/>
+            <!-- Inev cluster ↔ children -->
+            <line class="wmap-edge wmap-edge-child" data-from="inev" data-to="natural"  x1="526" y1="318" x2="680" y2="255"/>
+            <line class="wmap-edge wmap-edge-child" data-from="inev" data-to="market"   x1="526" y1="318" x2="680" y2="390"/>
+            <line class="wmap-edge wmap-edge-child" data-from="inev" data-to="whatkind" x1="526" y1="318" x2="430" y2="448"/>
+            <!-- Cross-cluster tensions (dashed) -->
+            <line class="wmap-edge wmap-edge-cross" data-from="writing"  data-to="lingeng"  x1="248" y1="28"  x2="180" y2="448"/>
+            <line class="wmap-edge wmap-edge-cross" data-from="register" data-to="whatkind" x1="242" y1="135" x2="430" y2="448"/>
+            <line class="wmap-edge wmap-edge-cross" data-from="parents"  data-to="market"   x1="70"  y1="255" x2="680" y2="390"/>
+          </g>
+
+          <!-- ── NODES ── -->
+          <g id="wmap-nodes">
+
+            <!-- Center -->
+            <g class="wmap-node" data-id="center" data-layer="center" role="button" tabindex="0" aria-label="The core problem">
+              <circle class="wmap-circle wmap-circle-center" cx="400" cy="245" r="32"/>
+              <text class="wmap-label-in" x="400" y="239" text-anchor="middle">Suzhounese</text>
+              <text class="wmap-label-in" x="400" y="251" text-anchor="middle">Preservation</text>
+            </g>
+
+            <!-- Cluster: Linguistic Obstacles -->
+            <g class="wmap-node" data-id="ling" data-layer="ling" role="button" tabindex="0" aria-label="Linguistic obstacles">
+              <circle class="wmap-circle wmap-circle-ling" cx="400" cy="100" r="26"/>
+              <text class="wmap-label-in" x="400" y="95" text-anchor="middle">Linguistic</text>
+              <text class="wmap-label-in" x="400" y="107" text-anchor="middle">Obstacles</text>
+            </g>
+
+            <!-- Cluster: Stakeholder Conflicts -->
+            <g class="wmap-node" data-id="stake" data-layer="stake" role="button" tabindex="0" aria-label="Stakeholder conflicts">
+              <circle class="wmap-circle wmap-circle-stake" cx="274" cy="318" r="26"/>
+              <text class="wmap-label-in" x="274" y="313" text-anchor="middle">Stakeholder</text>
+              <text class="wmap-label-in" x="274" y="325" text-anchor="middle">Conflicts</text>
+            </g>
+
+            <!-- Cluster: Inevitability Question -->
+            <g class="wmap-node" data-id="inev" data-layer="inev" role="button" tabindex="0" aria-label="The inevitability question">
+              <circle class="wmap-circle wmap-circle-inev" cx="526" cy="318" r="26"/>
+              <text class="wmap-label-in" x="526" y="313" text-anchor="middle">Inevitability</text>
+              <text class="wmap-label-in" x="526" y="325" text-anchor="middle">Question</text>
+            </g>
+
+            <!-- Ling children -->
+            <g class="wmap-node" data-id="writing" data-layer="ling" role="button" tabindex="0" aria-label="No writing system">
+              <circle class="wmap-circle wmap-circle-ling" cx="248" cy="28" r="15"/>
+              <text class="wmap-label-child" x="248" y="50" text-anchor="middle">No writing</text>
+              <text class="wmap-label-child" x="248" y="62" text-anchor="middle">system</text>
+            </g>
+
+            <g class="wmap-node" data-id="tones" data-layer="ling" role="button" tabindex="0" aria-label="7 tones and tone sandhi">
+              <circle class="wmap-circle wmap-circle-ling" cx="552" cy="28" r="15"/>
+              <text class="wmap-label-child" x="552" y="50" text-anchor="middle">7 tones +</text>
+              <text class="wmap-label-child" x="552" y="62" text-anchor="middle">sandhi</text>
+            </g>
+
+            <g class="wmap-node" data-id="voiced" data-layer="ling" role="button" tabindex="0" aria-label="Sounds Mandarin lost">
+              <circle class="wmap-circle wmap-circle-ling" cx="558" cy="135" r="15"/>
+              <text class="wmap-label-child" x="558" y="157" text-anchor="middle">Sounds</text>
+              <text class="wmap-label-child" x="558" y="169" text-anchor="middle">Mandarin lost</text>
+            </g>
+
+            <g class="wmap-node" data-id="register" data-layer="ling" role="button" tabindex="0" aria-label="Which Suzhounese?">
+              <circle class="wmap-circle wmap-circle-ling" cx="242" cy="135" r="15"/>
+              <text class="wmap-label-child" x="242" y="157" text-anchor="middle">Which</text>
+              <text class="wmap-label-child" x="242" y="169" text-anchor="middle">Suzhounese?</text>
+            </g>
+
+            <!-- Stake children -->
+            <g class="wmap-node" data-id="parents" data-layer="stake" role="button" tabindex="0" aria-label="Parents vs schools">
+              <circle class="wmap-circle wmap-circle-stake" cx="70" cy="255" r="15"/>
+              <text class="wmap-label-child" x="70" y="277" text-anchor="middle">Parents vs</text>
+              <text class="wmap-label-child" x="70" y="289" text-anchor="middle">schools</text>
+            </g>
+
+            <g class="wmap-node" data-id="govtlocal" data-layer="stake" role="button" tabindex="0" aria-label="National policy vs local culture">
+              <circle class="wmap-circle wmap-circle-stake" cx="70" cy="390" r="15"/>
+              <text class="wmap-label-child" x="70" y="412" text-anchor="middle">Policy vs</text>
+              <text class="wmap-label-child" x="70" y="424" text-anchor="middle">local culture</text>
+            </g>
+
+            <g class="wmap-node" data-id="lingeng" data-layer="stake" role="button" tabindex="0" aria-label="Linguists vs engineers">
+              <circle class="wmap-circle wmap-circle-stake" cx="180" cy="448" r="15"/>
+              <text class="wmap-label-child" x="180" y="470" text-anchor="middle">Linguists vs</text>
+              <text class="wmap-label-child" x="180" y="482" text-anchor="middle">engineers</text>
+            </g>
+
+            <g class="wmap-node" data-id="speakinst" data-layer="stake" role="button" tabindex="0" aria-label="Speakers vs institutions">
+              <circle class="wmap-circle wmap-circle-stake" cx="308" cy="448" r="15"/>
+              <text class="wmap-label-child" x="308" y="470" text-anchor="middle">Speakers vs</text>
+              <text class="wmap-label-child" x="308" y="482" text-anchor="middle">institutions</text>
+            </g>
+
+            <!-- Inev children -->
+            <g class="wmap-node" data-id="natural" data-layer="inev" role="button" tabindex="0" aria-label="Natural language evolution">
+              <circle class="wmap-circle wmap-circle-inev" cx="680" cy="255" r="15"/>
+              <text class="wmap-label-child" x="680" y="277" text-anchor="middle">Natural</text>
+              <text class="wmap-label-child" x="680" y="289" text-anchor="middle">evolution</text>
+            </g>
+
+            <g class="wmap-node" data-id="market" data-layer="inev" role="button" tabindex="0" aria-label="Market forces">
+              <circle class="wmap-circle wmap-circle-inev" cx="680" cy="390" r="15"/>
+              <text class="wmap-label-child" x="680" y="412" text-anchor="middle">Market</text>
+              <text class="wmap-label-child" x="680" y="424" text-anchor="middle">forces</text>
+            </g>
+
+            <g class="wmap-node" data-id="whatkind" data-layer="inev" role="button" tabindex="0" aria-label="Archive vs living language">
+              <circle class="wmap-circle wmap-circle-inev" cx="430" cy="448" r="15"/>
+              <text class="wmap-label-child" x="430" y="470" text-anchor="middle">Archive vs</text>
+              <text class="wmap-label-child" x="430" y="482" text-anchor="middle">living language</text>
+            </g>
+
+          </g><!-- /#wmap-nodes -->
+        </svg>
+      </div><!-- /.wmap-diagram -->
+
+      <div id="wmap-detail" class="wmap-detail" aria-live="polite">
+        <p class="wmap-detail-hint">Click any node to explore the forces at work.</p>
+      </div>
+
+    </section><!-- /#wicked-map -->
 
     <!-- A1: The Contradiction -->
     <section class="a-section">
@@ -4960,6 +5255,134 @@
 
     window.addEventListener('scroll', update, { passive: true });
     update();
+  })();
+
+  // ============================================================
+  // WICKED PROBLEM INTERACTIVE MAP
+  // ============================================================
+  (function() {
+    var DATA = {
+      center: {
+        layer: 'center',
+        title: 'The core problem',
+        body: 'Suzhounese has been spoken continuously for over a thousand years and is now on the edge of silence within a single generation. The difficulty isn\'t that we don\'t know what\'s happening — we do. The difficulty is that every serious intervention creates new complications. The three clusters around this node show why.'
+      },
+      ling: {
+        layer: 'ling',
+        title: 'The language itself resists documentation',
+        body: 'Before any social or political obstacle, there is a structural one: Suzhounese has features that standard documentation and digitization tools simply cannot handle. This isn\'t a resource problem — more money doesn\'t fix it. The language is technically complex in ways that break standard approaches. Click the surrounding nodes for each specific obstacle.'
+      },
+      stake: {
+        layer: 'stake',
+        title: 'Everyone involved has different — and competing — goals',
+        body: 'Parents, teachers, linguists, engineers, policymakers, and native speakers all have different definitions of what it means to "preserve" a dialect, and different incentives that often work against each other even when everyone is acting in good faith. Click the surrounding nodes to see specific fault lines.'
+      },
+      inev: {
+        layer: 'inev',
+        title: 'Is language death even a problem to be solved?',
+        body: 'Languages have always evolved and died. Mandarin itself displaced earlier languages in Suzhou. Some argue preservation is possible; others say it\'s a category error — you can\'t preserve a language, only use it. And "preservation" could mean archive, revitalization, or performance heritage — three completely different projects. Click the surrounding nodes to explore the tensions.'
+      },
+      writing: {
+        layer: 'ling',
+        title: 'No writing system',
+        body: 'Chinese characters encode meaning, not sound — so they can\'t represent Suzhounese phonology reliably. Speakers improvise spellings, each differently. Without a stable writing system, there can be no text corpus; without a text corpus, there can be no language model; without a language model, there can be no input method. Each missing piece blocks the next in a hard dependency chain that no other Chinese variety faces so completely.'
+      },
+      tones: {
+        layer: 'ling',
+        title: '7 tones — and they shift depending on context',
+        body: 'Suzhounese has seven tones (Mandarin has four). More critically, a syllable\'s tone isn\'t fixed — it changes depending on what surrounds it in a phrase, a process called tone sandhi. The first syllable of a phrase sets a "key" that transforms all syllables to its right. Speech AI trained on Mandarin has no architecture for this: it processes syllable by syllable, but Suzhounese requires understanding the whole phrase first.'
+      },
+      voiced: {
+        layer: 'ling',
+        title: 'Sounds that Mandarin lost a thousand years ago',
+        body: 'Suzhounese preserves a set of consonants — /b/, /d/, /g/, /v/, /z/ — produced with the vocal cords vibrating. Mandarin lost these roughly a thousand years ago. Every speech AI trained on Mandarin hears these sounds and guesses wrong, because it has never been trained to recognize them. With almost no examples in existing training data, error rates spike badly on exactly the sounds that make Suzhounese distinctive.'
+      },
+      register: {
+        layer: 'ling',
+        title: 'Which Suzhounese? There is more than one.',
+        body: 'There is no single standard "Suzhounese." Old-city speakers, Kunshan speakers, and younger urban speakers have noticeably different phonology. Formal Pingtan (storytelling) register differs from casual conversation. Standardizing for documentation marginalizes natural variation — but without standardization, any system is incoherent. Any model trained on "Suzhounese" may be encoding something no individual native speaker fully recognizes as their own dialect.'
+      },
+      parents: {
+        layer: 'stake',
+        title: 'Parents and schools are not the enemy — they\'re responding rationally',
+        body: 'Parents who want their children to succeed in China\'s education system have every rational incentive to speak Mandarin at home. Schools are legally mandated to teach in Mandarin. Teachers aren\'t wrong. Parents aren\'t wrong. But the aggregate result is that no domain remains in which Suzhounese is necessary. When a language loses all the spaces where it is the only option, it disappears — not because anyone decided to kill it.'
+      },
+      govtlocal: {
+        layer: 'stake',
+        title: 'National language policy and local heritage policy contradict each other — officially',
+        body: 'China\'s national Putonghua (Standard Mandarin) policy mandates Mandarin as the language of education, media, and government — justified by goals of national unity and economic mobility. Simultaneously, the government funds heritage preservation programs for local dialects. Both are official policy. They are structurally incompatible: you cannot simultaneously standardize national language and preserve thousands of local variants. The contradiction is not an oversight — it is the policy.'
+      },
+      lingeng: {
+        layer: 'stake',
+        title: 'Linguists and engineers want different things from the same recordings',
+        body: 'Linguists want naturalistic documentation: spontaneous conversation, diverse speakers, full pragmatic and social context. Engineers building speech AI want clean, phonetically balanced, labeled training data. These are genuinely different objects. A recording ideal for a language archive is often poorly suited for training a speech model, and vice versa. Funding follows different incentives depending on which goal you serve, and the two communities rarely collaborate on the same corpus.'
+      },
+      speakinst: {
+        layer: 'stake',
+        title: 'The people who hold the language and the institutions trying to save it want incompatible things',
+        body: 'The oldest native speakers — linguistically the most valuable — are often the least willing to be recorded as artifacts of a dying language. They want to use the language with their grandchildren, not donate it to an archive. Preservation institutions are optimized for documentation over transmission. The result: the most urgent gap (intergenerational transmission) is precisely what most institutional preservation programs don\'t address.'
+      },
+      natural: {
+        layer: 'inev',
+        title: 'Languages have always changed and died — is this time different?',
+        body: 'Suzhounese itself displaced earlier languages in the Suzhou region. Mandarin descended from a northern dialect that absorbed and replaced others over centuries. Language death is not new — it is the normal pattern of linguistic history. Some linguists argue that "preserving" a living language is a category error: languages cannot be preserved, only used. If a community collectively chooses not to use a language, no intervention can revive it as a living system.'
+      },
+      market: {
+        layer: 'inev',
+        title: 'Economic incentives point uniformly in one direction',
+        body: 'Mandarin proficiency is directly tied to educational and economic opportunity in China. English adds a second layer. No comparable economic advantage attaches to Suzhounese fluency. Individual speakers making individually rational decisions — maximizing their own and their children\'s opportunities — collectively produce a language shift that no one chose and no policy can easily reverse without changing the underlying economic structure.'
+      },
+      whatkind: {
+        layer: 'inev',
+        title: '"Preservation" means three completely different projects',
+        body: 'To a linguist: record every phoneme before it\'s gone (documentation). To a community advocate: create conditions for children to grow up speaking it (revitalization). To a policymaker: maintain Kunqu opera and Pingtan as living heritage performances (cultural conservation). These three goals require different strategies, different resources, and incompatible compromises. A project optimized for documentation will not produce revitalization. Conflating them is one of the most common reasons well-funded preservation efforts produce disappointing results.'
+      }
+    };
+
+    var LAYER_COLORS = { center: '#4A7A6D', ling: '#C4954A', stake: '#9A6678', inev: '#6A7A9A' };
+    var LAYER_NAMES  = { center: 'Core', ling: 'Linguistic', stake: 'Stakeholder', inev: 'Inevitability' };
+
+    function selectNode(id) {
+      var d = DATA[id]; if (!d) return;
+      document.querySelectorAll('#wmap-nodes .wmap-node').forEach(function(el) {
+        el.classList.toggle('wmap-active', el.dataset.id === id);
+      });
+      var c = LAYER_COLORS[d.layer], n = LAYER_NAMES[d.layer];
+      document.getElementById('wmap-detail').innerHTML =
+        '<span class="wmap-dtag" style="color:' + c + ';border-color:' + c + '">' + n + '</span>' +
+        '<h3 class="wmap-dtitle">' + d.title + '</h3>' +
+        '<p class="wmap-dbody">' + d.body + '</p>';
+    }
+
+    function setFilter(layer) {
+      document.querySelectorAll('.wmap-filter').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.layer === layer);
+      });
+      document.querySelectorAll('#wmap-nodes .wmap-node').forEach(function(el) {
+        var nl = el.dataset.layer;
+        var show = layer === 'all' || nl === 'center' || nl === layer;
+        el.style.opacity = show ? '1' : '0.1';
+        el.style.pointerEvents = show ? 'auto' : 'none';
+      });
+      document.querySelectorAll('#wmap-edges .wmap-edge').forEach(function(el) {
+        var f = el.dataset.from, t = el.dataset.to;
+        var fn = document.querySelector('[data-id="' + f + '"]');
+        var tn = document.querySelector('[data-id="' + t + '"]');
+        var fl = fn && fn.dataset.layer, tl = tn && tn.dataset.layer;
+        var show = layer === 'all' || fl === 'center' || tl === 'center' || fl === layer || tl === layer;
+        el.style.opacity = show ? '' : '0.05';
+      });
+    }
+
+    document.querySelectorAll('#wmap-nodes .wmap-node').forEach(function(el) {
+      el.addEventListener('click', function() { selectNode(el.dataset.id); });
+      el.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectNode(el.dataset.id); }
+      });
+    });
+    document.querySelectorAll('.wmap-filter').forEach(function(btn) {
+      btn.addEventListener('click', function() { setFilter(btn.dataset.layer); });
+    });
   })();
 </script>
 
