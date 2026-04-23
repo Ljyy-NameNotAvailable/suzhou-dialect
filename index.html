@@ -40,8 +40,8 @@
     ============================================================ */
     #page-shell {
       display: grid;
-      grid-template-columns: 200px 1fr 220px;
-      max-width: 1400px;
+      grid-template-columns: 200px 1fr;
+      max-width: 1160px;
       margin: 0 auto;
       align-items: start;
     }
@@ -49,7 +49,6 @@
     #page-content {
       min-width: 0;
       border-left: 1px solid var(--divider);
-      border-right: 1px solid var(--divider);
     }
 
     /* ── Sidebar ── */
@@ -63,128 +62,10 @@
       overflow-y: auto;
     }
 
-    /* ── Glossary panel ── */
-    #glossary {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      padding: 48px 16px 40px 20px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      background: rgba(0,0,0,0.03); /* very faint tint to separate from content */
-    }
-
-    .gloss-header {
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--divider);
-    }
-
-    .gloss-title {
-      font-family: var(--font-en);
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
-
-    .gloss-subtitle {
-      font-family: var(--font-en);
-      font-size: 11px;
-      color: var(--muted-label);
-      line-height: 1.4;
-    }
-
-    /* Category legend */
-    .gloss-legend {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 16px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid rgba(192,168,122,0.3);
-    }
-
-    .gloss-legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--font-en);
-      font-size: 10.5px;
-      color: var(--muted-label);
-    }
-
-    .gloss-legend-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 1px;
-      flex-shrink: 0;
-    }
-
-    /* ── Individual entry ── */
-    .gloss-entry {
-      margin-bottom: 13px;
-      padding-left: 8px;
-      border-left: 3px solid transparent;
-      position: relative;
-    }
-
-    /* category color bars */
-    .gloss-entry[data-cat="ling"]  { border-left-color: var(--accent); }
-    .gloss-entry[data-cat="tech"]  { border-left-color: var(--amber); }
-    .gloss-entry[data-cat="cult"]  { border-left-color: #9A6678; }
-
-    .gloss-entry-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 4px;
-      margin-bottom: 2px;
-    }
-
-    .gloss-term {
-      font-family: var(--font-en);
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text-primary);
-      flex-shrink: 0;
-    }
-
-    .gloss-zh {
-      font-family: var(--font-zh);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--divider);
-      flex-shrink: 0;
-      line-height: 1;
-    }
-
-    .gloss-entry:hover .gloss-zh {
-      color: var(--text-secondary);
-      transition: color 0.15s;
-    }
-
-    .gloss-def {
-      font-family: var(--font-en);
-      font-size: 11.5px;
-      color: var(--text-secondary);
-      line-height: 1.55;
-    }
-
-    /* highlight when a term in the text is hovered */
-    span.term {
+    /* inline term explanation — subtle underline on first-use spans */
+    span.term-def {
       border-bottom: 1px dotted var(--accent);
-      cursor: help;
-    }
-
-    /* Hide glossary on narrower screens */
-    @media (max-width: 1200px) {
-      #page-shell {
-        grid-template-columns: 200px 1fr;
-      }
-      #glossary { display: none; }
-      #page-content { border-right: none; }
+      cursor: default;
     }
 
     .side-nav-title {
@@ -271,14 +152,13 @@
       color: var(--accent);
     }
 
-    /* Collapse left sidebar on narrow screens */
+    /* Collapse sidebar on narrow screens */
     @media (max-width: 960px) {
       #page-shell {
         grid-template-columns: 1fr;
       }
       #side-nav { display: none; }
-      #glossary { display: none; }
-      #page-content { border-left: none; border-right: none; }
+      #page-content { border-left: none; }
     }
 
     html {
@@ -3135,12 +3015,13 @@
     <div class="intro-wicked" role="note">
       <p class="intro-wicked-label">The Central Question</p>
       <p class="intro-wicked-q">
-        Why, with 25 years of documented effort, government funding, and modern NLP tools,
+        Why, with 25 years of documented effort, government funding, and modern AI language tools,
         is Suzhounese still disappearing?
       </p>
       <p class="intro-wicked-body">
         That is the question this page investigates. The answer involves structural contradictions
-        inside China's language policy, a bootstrapping paradox in AI speech technology,
+        inside China's language policy, a bootstrapping paradox in AI speech technology
+        (you need recordings to train a model, but you need a working model to efficiently gather recordings),
         a writing system that does not exist, and a generation of speakers who grew up understanding
         a language they were never taught to speak. Scroll to find the piece that connects to you.
       </p>
@@ -3221,11 +3102,11 @@
         <div class="wsc-card-left">
           <p class="wsc-card-type-en lang-en">NLP Engineer · Computational Linguist</p>
           <p class="wsc-card-type-zh lang-zh">NLP工程师 · 计算语言学家</p>
-          <h3 class="wsc-card-headline-en lang-en">If you work on speech recognition or low-resource NLP</h3>
+          <h3 class="wsc-card-headline-en lang-en">If you build speech or language AI tools</h3>
           <h3 class="wsc-card-headline-zh lang-zh">如果你从事语音识别或低资源NLP</h3>
         </div>
         <div class="wsc-card-right">
-          <p class="wsc-card-body-en lang-en">Suzhounese is a maximally hard case for tonal ASR: seven tones with phonation-type conditioning, a full voiced obstruent series absent from every Mandarin-trained model, and complex sandhi that operates at the phrase level. This page explains precisely why corpus size alone does not solve it — and where the 2024 WenetSpeech-Wu release leaves the field.</p>
+          <p class="wsc-card-body-en lang-en">Suzhounese is a maximally hard case for speech recognition AI: seven tones, a set of consonants absent from every Mandarin-trained model, and tone changes that can only be decoded at the phrase level — not syllable by syllable. This page explains precisely why throwing more data at the problem doesn't solve it — and where the 2024 WenetSpeech-Wu dataset leaves the field.</p>
           <p class="wsc-card-body-zh lang-zh">苏州话是调值最复杂的语音识别难题之一：七个声调伴随发声类型调节、全套浊阻音在所有普通话训练模型中均无表示、短语级复杂连读变调。本页精确解释了为什么语料库规模无法单独解决这些问题，以及2024年WenetSpeech-Wu发布后该领域的现状。</p>
           <a class="wsc-card-anchor lang-en" href="#main-content">See the technology landscape →</a>
           <a class="wsc-card-anchor wsc-card-anchor-zh lang-zh" href="#main-content">查看技术现状 →</a>
@@ -3648,11 +3529,11 @@
     <section class="a-section">
       <p class="a-eyebrow">For Researchers &amp; Language Technologists</p>
       <h2 class="a-header-lg">
-        Wu dialect corpora are growing.<br>
-        Speakers are not.
+        The recordings keep growing.<br>
+        The speakers don't.
       </h2>
       <p class="a-body">
-        ASR benchmark accuracy on Wu dialect has improved measurably in the past five years. The speaker population capable of producing natural, unscripted Wu speech has declined in the same period. The tools are getting better at preserving an artifact of something that is ceasing to exist as a living system.<sup class="cite"><a href="#ref-5">[5]</a></sup>
+        Speech recognition accuracy on Wu dialect has improved measurably in the past five years — driven partly by the release of the WenetSpeech-Wu dataset, a large collection of recorded Wu speech (a <em>corpus</em>) assembled for training AI models. At the same time, the population capable of producing natural, unscripted Wu speech has declined. The tools are getting better at preserving an artifact of something that is ceasing to exist as a living system.<sup class="cite"><a href="#ref-5">[5]</a></sup>
       </p>
 
       <ul class="failure-list" aria-label="Failure modes in dialect preservation">
@@ -3704,9 +3585,9 @@
 
     <!-- A1b: Linguistic Portrait -->
     <section class="a-section portrait-section">
-      <h2 class="a-header-md" style="font-size:20px;">Why Suzhounese is technically hard to model</h2>
+      <h2 class="a-header-md" style="font-size:20px;">Why speech software struggles with Suzhounese</h2>
       <p class="a-body-sm" style="margin-bottom:0;">
-        Before the social wicked problem, there is a purely technical one. Three features of Suzhounese make it resistant to standard NLP pipelines — and understanding them clarifies why corpus size alone does not solve the problem.
+        Before the social problem, there is a purely technical one. Three features of Suzhounese make it resistant to standard speech AI pipelines — and understanding them clarifies why having more recordings alone does not solve the problem.
       </p>
 
       <div class="feature-cards">
@@ -3753,8 +3634,8 @@
               <polyline points="4,12 8,8 4,4" fill="none" stroke="#5B8A7D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
-          <p class="feature-title">Left-dominant tone sandhi cascades</p>
-          <p class="feature-body">Tones are not syllable-level; the tone of the leftmost syllable in a prosodic domain spreads rightward, overriding all others. Standard phoneme-level ASR pipelines fail here — the domain must be parsed before any syllable can be classified.</p>
+          <p class="feature-title">Tones shift depending on neighboring syllables</p>
+          <p class="feature-body">In Suzhounese, the tone of a syllable changes based on what surrounds it — a phenomenon called <em>tone sandhi</em>. Specifically, the first syllable of a phrase sets a "tone key" that overwrites all syllables to its right. AI speech systems built on Mandarin — where tones are fixed per syllable — have no architecture for this; they must understand the whole phrase before decoding any individual sound.</p>
           <div class="sandhi-demo">
             <div class="sandhi-row">
               <span class="sandhi-syl">今</span>
@@ -3783,8 +3664,8 @@
               <line x1="8"  y1="22" x2="16" y2="22" stroke="#5B8A7D" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </div>
-          <p class="feature-title">Voiced obstruents from Middle Chinese</p>
-          <p class="feature-body">Suzhounese preserves /b, d, g, v, z/ — voiced stops, affricates, and fricatives lost in Mandarin. Mandarin-trained models systematically misclassify these as their voiceless counterparts. With near-zero representation in existing training corpora, error rates spike.</p>
+          <p class="feature-title">Sounds that Mandarin erased — still alive here</p>
+          <p class="feature-body">Suzhounese preserves a set of consonants — /b, d, g, v, z/ — produced with the vocal cords vibrating (called <em>voiced obstruents</em>). Mandarin lost these roughly a thousand years ago. Every speech AI trained on Mandarin hears these sounds and guesses wrong, because it has never been trained to recognize them at all. With almost no examples in existing training data, error rates spike.</p>
           <p style="font-size:11px;color:var(--text-secondary);font-family:var(--font-en);margin-bottom:6px;margin-top:8px;">Present in Suzhounese / absent in Mandarin:</p>
           <div class="voiced-compare">
             <span class="voiced-pill has">/b/</span>
@@ -3868,7 +3749,7 @@
 
     <!-- A2b: Wicked Problem Paradigm — Four Dimensions -->
     <section class="a-section">
-      <h2 class="a-header-md" style="font-size:20px;">How Suzhou dialect preservation fits the wicked problem paradigm</h2>
+      <h2 class="a-header-md" style="font-size:20px;">Why the usual solutions keep failing</h2>
       <p class="paradigm-intro">
         Rittel &amp; Webber<sup class="cite"><a href="#ref-2">[2]</a></sup> identified ten properties of wicked problems. Four are especially visible here — including one that is often overlooked: despite deep conflict, stakeholders share more than they acknowledge.
       </p>
@@ -4523,144 +4404,6 @@
 
   </div><!-- /#page-content -->
 
-  <!-- ============================================================
-       RIGHT GLOSSARY SIDEBAR
-  ============================================================ -->
-  <aside id="glossary" aria-label="Terminology glossary">
-
-    <div class="gloss-header">
-      <div class="gloss-title">Glossary</div>
-      <div class="gloss-subtitle">Key terms in this article</div>
-    </div>
-
-    <div class="gloss-legend">
-      <div class="gloss-legend-item">
-        <span class="gloss-legend-dot" style="background:var(--accent)"></span>
-        Linguistics
-      </div>
-      <div class="gloss-legend-item">
-        <span class="gloss-legend-dot" style="background:var(--amber)"></span>
-        Technology
-      </div>
-      <div class="gloss-legend-item">
-        <span class="gloss-legend-dot" style="background:#9A6678"></span>
-        Culture
-      </div>
-    </div>
-
-    <div class="gloss-entry" data-cat="tech">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Corpora</span>
-        <span class="gloss-zh">语料库</span>
-      </div>
-      <span class="gloss-def">Structured collections of text or audio for training language models. Singular: <em>corpus</em>.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="tech">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">ASR</span>
-        <span class="gloss-zh">自动语音识别</span>
-      </div>
-      <span class="gloss-def">Automatic Speech Recognition — converts spoken audio into text.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="tech">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">TTS</span>
-        <span class="gloss-zh">文本转语音</span>
-      </div>
-      <span class="gloss-def">Text-to-Speech — synthesizes spoken audio from written text.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="tech">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">NLP</span>
-        <span class="gloss-zh">自然语言处理</span>
-      </div>
-      <span class="gloss-def">Natural Language Processing — AI that understands and generates human language.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="tech">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Bootstrapping paradox</span>
-        <span class="gloss-zh">自举悖论</span>
-      </div>
-      <span class="gloss-def">You need data to train a model, but a model to efficiently label data. Low-resource languages are trapped in this loop.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="ling">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Wu Chinese</span>
-        <span class="gloss-zh">吴语</span>
-      </div>
-      <span class="gloss-def">Chinese branch spoken across Jiangsu, Zhejiang, and Shanghai. Suzhounese is its prestige variety.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="ling">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Tone sandhi</span>
-        <span class="gloss-zh">连调变调</span>
-      </div>
-      <span class="gloss-def">A syllable's tone shifts when next to other tones in a phrase. Suzhounese has one of the most complex sandhi systems in Chinese.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="ling">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Voiced obstruents</span>
-        <span class="gloss-zh">浊阻音</span>
-      </div>
-      <span class="gloss-def">Consonants (/b/, /d/, /g/…) with vocal cord vibration. Preserved in Suzhounese from Middle Chinese; lost in most other Chinese varieties.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="ling">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Checked tones</span>
-        <span class="gloss-zh">入声</span>
-      </div>
-      <span class="gloss-def">Short syllables ending in /-p/, /-t/, or /-k/ from Middle Chinese. Suzhounese retains them; Mandarin absorbed them into other tones.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="ling">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Sociolinguistics</span>
-        <span class="gloss-zh">社会语言学</span>
-      </div>
-      <span class="gloss-def">How social forces — identity, policy, urbanization — shape language change over time.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="ling">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Wicked problem</span>
-        <span class="gloss-zh">棘手难题</span>
-      </div>
-      <span class="gloss-def">A problem whose solution changes the problem itself, with no definitive answer. Coined by Rittel &amp; Webber (1973).</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="cult">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Pingtan</span>
-        <span class="gloss-zh">评弹</span>
-      </div>
-      <span class="gloss-def">Suzhou storytelling-music, performed in Suzhounese, combining <em>pipa</em> lute and <em>sanxian</em> with sung narrative.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="cult">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Kunqu</span>
-        <span class="gloss-zh">昆曲</span>
-      </div>
-      <span class="gloss-def">Oldest surviving Chinese opera, originating in Suzhou. UNESCO Masterpiece 2001. Its phonology is rooted in Suzhounese.</span>
-    </div>
-
-    <div class="gloss-entry" data-cat="cult">
-      <div class="gloss-entry-head">
-        <span class="gloss-term">Intangible heritage</span>
-        <span class="gloss-zh">非遗</span>
-      </div>
-      <span class="gloss-def">UNESCO category for living practices — music, language, ritual — that cannot be preserved in a museum.</span>
-    </div>
-
-  </aside>
 
 </div><!-- /#page-shell -->
 
