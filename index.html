@@ -2423,16 +2423,9 @@
 
     .portals-inner {
       /* max-width/padding set by unified container rule */
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-    }
-
-    @media (max-width: 900px) {
-      .portals-inner {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
     }
 
     .portal-block {
