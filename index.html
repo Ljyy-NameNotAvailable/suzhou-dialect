@@ -68,6 +68,82 @@
       cursor: default;
     }
 
+    /* ============================================================
+       READING PROGRESS BAR
+    ============================================================ */
+    #rdg-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--accent);
+      z-index: 9999;
+      pointer-events: none;
+      transition: width 0.08s linear;
+    }
+
+    /* ============================================================
+       SCROLL-REVEAL ANIMATIONS
+    ============================================================ */
+    .sf {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .sf.sf-in {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ============================================================
+       CARD HOVER LIFTS
+    ============================================================ */
+    .gen-card {
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .gen-card:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .feature-card {
+      transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .feature-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      transform: translateY(-2px);
+    }
+
+    .paradigm-card {
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+    }
+    .paradigm-card:hover {
+      box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+    }
+
+    .wsc-card {
+      transition: background 0.15s ease;
+    }
+    .wsc-card:hover {
+      background: rgba(0,0,0,0.015);
+    }
+
+    /* Wicked problem table row hover */
+    .wicked-table tr.expandable {
+      transition: background 0.15s;
+    }
+    .wicked-table tr.expandable:hover {
+      background: rgba(196,149,74,0.06);
+    }
+
+    /* Timeline item hover */
+    .tl-item {
+      transition: background 0.15s ease;
+    }
+    .tl-item:hover {
+      background: rgba(0,0,0,0.02);
+    }
+
     .side-nav-title {
       font-family: var(--font-en);
       font-size: 14px;
@@ -5226,6 +5302,75 @@
 
     window.addEventListener('scroll', update, { passive: true });
     update();
+  })();
+
+  // ============================================================
+  // READING PROGRESS BAR
+  // ============================================================
+  (function() {
+    var bar = document.createElement('div');
+    bar.id = 'rdg-progress';
+    document.body.insertBefore(bar, document.body.firstChild);
+    function update() {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? window.scrollY / max * 100 : 0) + '%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+
+  // ============================================================
+  // SCROLL-REVEAL ANIMATIONS
+  // ============================================================
+  (function() {
+    if (!window.IntersectionObserver) return;
+
+    // Groups whose direct children should stagger
+    var staggerGroups = [
+      '.audio-cards', '.feature-cards', '.paradigm-grid',
+      '.wsc-grid', '.failure-list', '.tl-track', '.intro-stats'
+    ];
+
+    // Collect all elements to animate
+    var singles = Array.from(document.querySelectorAll(
+      '.a-section, .track-b-section, .intro-inner > *, .wmap-section'
+    ));
+
+    // Collect stagger children
+    var staggerEls = [];
+    staggerGroups.forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(group) {
+        Array.from(group.children).forEach(function(child, i) {
+          child._sfDelay = i * 90; // ms per item
+          staggerEls.push(child);
+        });
+      });
+    });
+
+    // Remove duplicates (stagger children may also be in singles)
+    var allEls = staggerEls.concat(singles.filter(function(el) {
+      return !staggerEls.includes(el);
+    }));
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var delay = el._sfDelay || 0;
+        setTimeout(function() { el.classList.add('sf-in'); }, delay);
+        observer.unobserve(el);
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -24px 0px' });
+
+    allEls.forEach(function(el) {
+      // Skip if already in viewport on load
+      var rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 40 && rect.bottom > 0) {
+        return; // already visible — don't hide
+      }
+      el.classList.add('sf');
+      observer.observe(el);
+    });
   })();
 
   // ============================================================
