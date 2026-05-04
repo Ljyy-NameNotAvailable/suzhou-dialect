@@ -1820,6 +1820,8 @@
     .tl-badge.tech      { background: #FBF3E7; color: var(--amber); }
     .tl-badge.community { background: #EAF2FB; color: #2980B9; }
     .tl-badge.research  { background: #EAF3F1; color: var(--accent); }
+    .tl-badge.danger    { background: #FDECEA; color: #C0392B; }
+    .tl-item.danger::before { border-color: #C0392B; background: #C0392B; }
 
     /* Language-aware timeline */
     body.show-zh .timeline-lang-en { display: none; }
@@ -3191,6 +3193,654 @@
       margin: 0 0 8px;
       line-height: 1.3;
     }
+    /* ============================================================
+       NEW CSS CUSTOM PROPERTIES
+    ============================================================ */
+    :root {
+      --danger:  #C0392B;
+      --purple:  #9B59B6;
+      --blue:    #2980B9;
+      --green:   #27AE60;
+    }
+
+    /* ============================================================
+       SECTION A: DEMOGRAPHIC VISUALIZATION (#demographic-viz)
+    ============================================================ */
+    #demographic-viz {
+      padding: 72px 0 64px;
+      background: var(--bg);
+      border-top: 1px solid var(--divider);
+    }
+
+    .demographic-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    @media (max-width: 600px) {
+      .demographic-inner { padding: 0 20px; }
+    }
+
+    /* Section header band */
+    .section-header-band {
+      margin-bottom: 48px;
+    }
+
+    /* Decline chart */
+    .decline-chart-wrap {
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    .decline-chart {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      gap: 32px;
+      justify-content: center;
+      height: 220px;
+      padding-bottom: 40px;
+      border-bottom: 2px solid var(--divider);
+    }
+
+    .decline-bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .decline-bar-pct {
+      font-family: var(--font-en);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .decline-bar {
+      width: 72px;
+      border-radius: 3px 3px 0 0;
+      transition: opacity 0.2s;
+    }
+
+    .decline-bar:hover { opacity: 0.82; }
+
+    .decline-bar-year {
+      position: absolute;
+      bottom: -28px;
+      font-family: var(--font-en);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+    }
+
+    /* Annotation arrow between bars */
+    .decline-annotation {
+      position: absolute;
+      bottom: 50px;
+      font-family: var(--font-en);
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-style: italic;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .decline-chart-caption {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    /* Accessible table for screen readers */
+    .decline-table-details {
+      margin-top: 12px;
+    }
+
+    .decline-table-details summary {
+      font-family: var(--font-en);
+      font-size: 12px;
+      color: var(--accent);
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .decline-sr-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-en);
+      font-size: 13px;
+    }
+
+    .decline-sr-table th, .decline-sr-table td {
+      padding: 8px 12px;
+      border: 1px solid var(--divider);
+      text-align: left;
+    }
+
+    .decline-sr-table th {
+      background: var(--white);
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* Heatmap */
+    .domain-heatmap {
+      margin: 40px 0;
+    }
+
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: 120px repeat(6, 1fr);
+      gap: 4px;
+      overflow-x: auto;
+    }
+
+    @media (max-width: 600px) {
+      .heatmap-grid { min-width: 520px; }
+      .domain-heatmap { overflow-x: auto; }
+    }
+
+    .heatmap-corner { /* empty top-left */ }
+
+    .heatmap-col-label {
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: center;
+      padding: 4px 2px 8px;
+      letter-spacing: 0.03em;
+    }
+
+    .heatmap-col-label.zh-label {
+      font-family: var(--font-zh);
+      font-size: 12px;
+    }
+
+    .heatmap-row-label {
+      font-family: var(--font-en);
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      padding-right: 8px;
+    }
+
+    .heatmap-row-label.zh-label {
+      font-family: var(--font-zh);
+      font-size: 13px;
+    }
+
+    .heatmap-cell {
+      height: 44px;
+      border-radius: 4px;
+      transition: opacity 0.15s;
+    }
+
+    .heatmap-cell:hover { opacity: 0.80; }
+
+    .heatmap-cell[data-level="4"] { background: var(--accent); }
+    .heatmap-cell[data-level="3"] { background: var(--accent-light); }
+    .heatmap-cell[data-level="2"] { background: #B8CEC8; }
+    .heatmap-cell[data-level="1"] { background: #D8E4E2; }
+    .heatmap-cell[data-level="0"] { background: #EDEAE4; border: 1px solid var(--divider); }
+
+    .heatmap-legend {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .heatmap-legend-label {
+      font-family: var(--font-en);
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .heatmap-legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Stat callout */
+    .stat-callout {
+      border-left: 4px solid var(--amber);
+      padding: 16px 20px;
+      max-width: 560px;
+      margin: 32px auto 0;
+      background: var(--white);
+      border-radius: 0 6px 6px 0;
+    }
+
+    .stat-callout p {
+      font-family: var(--font-en);
+      font-size: 14px;
+      font-style: italic;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    .stat-callout p.zh {
+      font-family: var(--font-zh);
+      font-style: normal;
+      line-height: 1.9;
+    }
+
+    /* ============================================================
+       SECTION B: TECHNOLOGY LANDSCAPE
+    ============================================================ */
+    .tech-landscape-section {
+      margin-top: 0;
+    }
+
+    .tech-grid {
+      margin-top: 20px;
+      border: 1px solid var(--divider);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .tech-grid-header {
+      display: grid;
+      grid-template-columns: 160px repeat(3, 1fr);
+      background: var(--white);
+      border-bottom: 2px solid var(--divider);
+    }
+
+    .tech-col-label {
+      font-family: var(--font-en);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+      padding: 12px 14px;
+      text-align: center;
+    }
+
+    .tech-grid-row {
+      display: grid;
+      grid-template-columns: 160px repeat(3, 1fr);
+      border-bottom: 1px solid var(--divider);
+    }
+
+    .tech-grid-row:last-child { border-bottom: none; }
+
+    .tech-row-label {
+      font-family: var(--font-en);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      background: rgba(0,0,0,0.015);
+      border-right: 1px solid var(--divider);
+    }
+
+    .tech-cell {
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-right: 1px solid var(--divider);
+    }
+
+    .tech-cell:last-child { border-right: none; }
+
+    .tech-status-label {
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .tech-status-note {
+      font-family: var(--font-en);
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .status-mature  { background: #EAF3F1; }
+    .status-mature  .tech-status-label { color: var(--accent); }
+    .status-partial { background: #FBF3E7; }
+    .status-partial .tech-status-label { color: var(--amber); }
+    .status-minimal { background: #FDECEA; }
+    .status-minimal .tech-status-label { color: #C0392B; }
+    .status-absent  { background: #F5F5F5; }
+    .status-absent  .tech-status-label { color: #999; }
+
+    @media (max-width: 600px) {
+      .tech-grid-header,
+      .tech-grid-row { grid-template-columns: 100px repeat(3, 1fr); }
+      .tech-col-label, .tech-cell, .tech-row-label { padding: 10px 8px; }
+      .tech-status-note { display: none; }
+    }
+
+    /* Paradox callout */
+    .paradox-callout {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: #FDECEA;
+      border: 1px solid #EFC8C4;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-top: 24px;
+    }
+
+    .paradox-icon {
+      font-size: 24px;
+      color: #C0392B;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .paradox-title {
+      font-family: var(--font-en);
+      font-size: 15px;
+      font-weight: 600;
+      color: #C0392B;
+      margin-bottom: 6px;
+    }
+
+    .paradox-title.zh {
+      font-family: var(--font-zh);
+    }
+
+    .paradox-body {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .paradox-body.zh {
+      font-family: var(--font-zh);
+      line-height: 1.9;
+    }
+
+    /* ============================================================
+       SECTION C: COMPARATIVE CASES (#cases)
+    ============================================================ */
+    #cases {
+      padding: 72px 0 64px;
+      background: var(--white);
+      border-top: 1px solid var(--divider);
+    }
+
+    .cases-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    @media (max-width: 900px) {
+      .cases-inner { padding: 0 20px; }
+    }
+
+    .case-comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 900px) {
+      .case-comparison-grid { grid-template-columns: 1fr; }
+    }
+
+    .case-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      border: 1px solid var(--divider);
+    }
+
+    .case-card-header {
+      padding: 20px 20px 14px;
+    }
+
+    .case-card-title {
+      font-family: var(--font-en);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .case-card-title-zh {
+      font-family: var(--font-zh);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .case-status-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      padding: 3px 10px;
+      border-radius: 12px;
+      margin-top: 4px;
+    }
+
+    .case-card-body {
+      padding: 0 20px 20px;
+    }
+
+    .case-list {
+      list-style: none;
+      margin: 0 0 12px;
+      padding: 0;
+    }
+
+    .case-advantage,
+    .case-disadvantage {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      padding: 3px 0;
+    }
+
+    .case-advantage::before  { content: "✓ "; color: var(--accent);  font-weight: 700; }
+    .case-disadvantage::before { content: "✗ "; color: #C0392B; font-weight: 700; }
+
+    .case-lesson {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--text-primary);
+      border-left: 3px solid var(--accent);
+      padding-left: 12px;
+      margin: 14px 0;
+      line-height: 1.7;
+    }
+
+    .case-lesson.zh {
+      font-family: var(--font-zh);
+      font-style: normal;
+      line-height: 1.85;
+    }
+
+    .case-transfer {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 10px;
+      background: var(--bg);
+      border-radius: 4px;
+      padding: 8px 12px;
+      line-height: 1.6;
+    }
+
+    .case-transfer strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .case-section-label {
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin: 12px 0 6px;
+    }
+
+    /* ============================================================
+       SECTION D: SOLUTIONS MATRIX (#solutions-matrix)
+    ============================================================ */
+    #solutions-matrix {
+      padding: 72px 0 64px;
+      background: #EDEAE4;
+    }
+
+    .solutions-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    @media (max-width: 900px) {
+      .solutions-inner { padding: 0 20px; }
+    }
+
+    .solutions-table-wrapper {
+      overflow-x: auto;
+      margin-top: 32px;
+    }
+
+    .solutions-matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .solutions-matrix-table caption {
+      font-family: var(--font-en);
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-align: left;
+      margin-bottom: 8px;
+      caption-side: top;
+      padding-bottom: 8px;
+    }
+
+    .solutions-matrix-table thead th {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--divider);
+      text-align: left;
+      white-space: nowrap;
+      background: rgba(255,255,255,0.6);
+    }
+
+    .solutions-matrix-table tbody tr {
+      border-bottom: 1px solid var(--divider);
+    }
+
+    .solutions-matrix-table tbody tr:last-child { border-bottom: none; }
+
+    .solutions-matrix-table tbody td {
+      padding: 14px;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    .solutions-matrix-table tbody td:nth-child(1),
+    .solutions-matrix-table tbody td:nth-child(4) {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .solutions-matrix-table tbody td:nth-child(3),
+    .solutions-matrix-table tbody td:nth-child(6) {
+      color: #C0392B;
+      font-style: italic;
+    }
+
+    .solutions-matrix-table tbody tr:nth-child(odd)  { background: rgba(255,255,255,0.5); }
+    .solutions-matrix-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.2); }
+
+    /* Language-aware column switching */
+    body.show-en .solutions-matrix-table th:nth-child(4),
+    body.show-en .solutions-matrix-table th:nth-child(5),
+    body.show-en .solutions-matrix-table th:nth-child(6),
+    body.show-en .solutions-matrix-table td:nth-child(4),
+    body.show-en .solutions-matrix-table td:nth-child(5),
+    body.show-en .solutions-matrix-table td:nth-child(6) { display: none; }
+
+    body.show-zh .solutions-matrix-table th:nth-child(1),
+    body.show-zh .solutions-matrix-table th:nth-child(2),
+    body.show-zh .solutions-matrix-table th:nth-child(3),
+    body.show-zh .solutions-matrix-table td:nth-child(1),
+    body.show-zh .solutions-matrix-table td:nth-child(2),
+    body.show-zh .solutions-matrix-table td:nth-child(3) { display: none; }
+
+    /* ============================================================
+       SECTION E: CLOSING SOURCES TOGGLE
+    ============================================================ */
+    .closing-sources {
+      margin-top: 24px;
+    }
+
+    .sources-toggle {
+      background: none;
+      border: 1px solid #2C3330;
+      color: var(--muted-label);
+      padding: 6px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: var(--font-en);
+      margin: 0 auto;
+      display: block;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .sources-toggle:hover { border-color: var(--accent); color: var(--accent-light); }
+
+    .sources-list {
+      display: none;
+      margin-top: 20px;
+      column-count: 2;
+      column-gap: 32px;
+    }
+
+    .sources-list.visible { display: block; }
+
+    .sources-list a {
+      font-size: 12px;
+      color: var(--muted-label);
+      display: block;
+      margin-bottom: 10px;
+      line-height: 1.5;
+      break-inside: avoid;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .sources-list a:hover { color: var(--accent-light); border-color: var(--accent-light); }
+
+    @media (max-width: 600px) { .sources-list { column-count: 1; } }
+
     .wmap-dbody {
       font-family: var(--font-en);
       font-size: 13.5px;
@@ -3623,11 +4273,10 @@
             <span class="gen-card-year">邵氏电影《乾隆下扬州》· 1978</span>
           </div>
           <div class="gen-card-video-wrapper">
-            <video controls preload="metadata"
+            <iframe src="https://drive.google.com/file/d/1nwfJngmBNOWhxlP43dlw__BVSbozUvMo/preview"
+              allow="autoplay" frameborder="0"
               aria-label="邵氏《乾隆下扬州》— 旧时代苏州话日常口语示范">
-              <source src="videos/Pingtan.mp4" type="video/mp4">
-              <p style="padding:20px;color:#fff;font-size:13px;">您的浏览器不支持此视频格式。请使用 Safari 或更新版本的 Chrome 播放。</p>
-            </video>
+            </iframe>
           </div>
           <p class="gen-card-desc">「片中女子虽是评弹出身，但这段展示的是旧时代苏州人的日常口语——字字入声，韵味天然。这不只是语言，也是一段文化地位的记忆。明清时期，"苏人以为雅者，则天下雅之"。嘲笑乾隆听不懂苏州话的，是扬州酒馆里的一个小二；台子底下跟着起哄叫好的，是一群扬州本地的纨绔子弟。江南一带，能听懂苏州话，是身份，是品位，是荣耀。」</p>
           <div class="gen-card-attribution">
@@ -3649,11 +4298,10 @@
             <span class="gen-card-year">施斌 · 西周婚礼风俗 · 苏州电视台</span>
           </div>
           <div class="gen-card-video-wrapper">
-            <video controls preload="metadata"
+            <iframe src="https://drive.google.com/file/d/1ijqq7QPk-4JfNYy44ptFIBChHdrt_FS1/preview"
+              allow="autoplay" frameborder="0"
               aria-label="施斌 — 苏州电视台节目《聊斋婚服》苏州话解说片段">
-              <source src="videos/shibin.mp4" type="video/mp4">
-              <p style="padding:20px;color:#fff;font-size:13px;">您的浏览器不支持此视频格式。请使用 Safari 或更新版本的 Chrome 播放。</p>
-            </video>
+            </iframe>
           </div>
           <p class="gen-card-desc">「苏州电视台主持人施斌以苏州话讲述西周婚礼风俗。苏州话还在——但普通话词汇与节奏已悄然渗入。这一代是方言与普通话共存的过渡层。」</p>
           <div class="gen-card-attribution">
@@ -3676,11 +4324,10 @@
             <span class="gen-card-year">2024–2025年录制</span>
           </div>
           <div class="gen-card-video-wrapper">
-            <video controls preload="metadata"
+            <iframe src="https://drive.google.com/file/d/1VEWOepHofuIpidr1aB8-9KsHN-I8tV59/preview"
+              allow="autoplay" frameborder="0"
               aria-label="零零后苏州话示范 — 作者自录">
-              <source src="videos/genz.mp4" type="video/mp4">
-              <p style="padding:20px;color:#fff;font-size:13px;">您的浏览器不支持此视频格式。</p>
-            </video>
+            </iframe>
           </div>
           <p class="gen-card-desc">「能听懂，也能说出几句，但语调和词汇量已大幅萎缩。这不是懒惰，是一整个语言环境的消失——学校、媒体、同龄人，全是普通话。」</p>
           <div class="gen-card-attribution">
@@ -3793,6 +4440,57 @@
             <span class="voiced-pill has">/z/</span>
           </div>
           <p style="font-size:11px;color:var(--text-secondary);font-family:var(--font-zh);margin-top:8px;font-style:italic;">这些音素在普通话训练语料中几乎不存在，导致模型系统性地识别错误。</p>
+        </div>
+
+        <!-- 第四张卡：元音系统 -->
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="8" cy="8" rx="4" ry="5" stroke="#5B8A7D" stroke-width="1.5" fill="none"/>
+              <ellipse cx="20" cy="8" rx="4" ry="5" stroke="#5B8A7D" stroke-width="1.5" fill="none"/>
+              <ellipse cx="14" cy="17" rx="4" ry="4" stroke="#C4954A" stroke-width="1.5" fill="none"/>
+            </svg>
+          </div>
+          <p class="feature-title-zh">比普通话更丰富的元音系统</p>
+          <p class="feature-body-zh">苏州话包含普通话中完全没有的圆唇前中元音，如/ø/，与法语"feu"中的发音相似，展现了吴语保留古汉语特征的独特性。</p>
+          <svg viewBox="0 0 120 80" width="120" height="80" aria-label="国际音标元音图：青色圆点为吴语特有元音 /y/ 与 /ø/，灰色为普通话共有元音" role="img" style="margin-top:10px;display:block;">
+            <title>简化国际音标元音梯形图。青色圆点为苏州话特有元音，灰色为与普通话共有元音。</title>
+            <polygon points="10,10 110,10 100,75 20,75" fill="none" stroke="#C0A87A" stroke-width="0.8" opacity="0.5"/>
+            <circle cx="10"  cy="10"  r="5" fill="#C8D8D5"/>
+            <text x="10" y="6" text-anchor="middle" font-size="7" fill="#6A5C40" font-family="serif">/i/</text>
+            <circle cx="110" cy="10"  r="5" fill="#C8D8D5"/>
+            <text x="110" y="6" text-anchor="middle" font-size="7" fill="#6A5C40" font-family="serif">/u/</text>
+            <circle cx="15"  cy="45"  r="5" fill="#C8D8D5"/>
+            <text x="15" y="41" text-anchor="middle" font-size="7" fill="#6A5C40" font-family="serif">/e/</text>
+            <circle cx="105" cy="45"  r="5" fill="#C8D8D5"/>
+            <text x="105" y="41" text-anchor="middle" font-size="7" fill="#6A5C40" font-family="serif">/o/</text>
+            <circle cx="20"  cy="75"  r="5" fill="#C8D8D5"/>
+            <text x="20" y="71" text-anchor="middle" font-size="7" fill="#6A5C40" font-family="serif">/a/</text>
+            <circle cx="10"  cy="22"  r="5" fill="#5B8A7D"/>
+            <text x="10" y="18" text-anchor="middle" font-size="7" fill="#fff" font-family="serif">/y/</text>
+            <circle cx="15"  cy="57"  r="5" fill="#5B8A7D"/>
+            <text x="15" y="53" text-anchor="middle" font-size="7" fill="#fff" font-family="serif">/ø/</text>
+            <circle cx="42" cy="74" r="3.5" fill="#5B8A7D"/>
+            <text x="48" y="77" font-size="7" fill="#6A5C40" font-family="serif">吴语特有</text>
+            <circle cx="82" cy="74" r="3.5" fill="#C8D8D5"/>
+            <text x="88" y="77" font-size="7" fill="#6A5C40" font-family="serif">共有</text>
+          </svg>
+        </div>
+
+        <!-- 第五张卡：文学传承 -->
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="#5B8A7D" stroke-width="1.4" fill="none"/>
+            </svg>
+          </div>
+          <p class="feature-title-zh">昆曲与评弹的音韵根基</p>
+          <p class="feature-body-zh">明代音乐家魏良辅以苏州方言腔调为基础创制了昆山腔，成为昆曲的标准音。评弹至今必须用苏州话演出——换了语言，艺术便不复存在。</p>
+          <div class="cause-tags" style="margin-top:10px;">
+            <span class="cause-tag-zh">昆曲</span>
+            <span class="cause-tag-zh">评弹</span>
+            <span class="cause-tag-zh">非物质文化遗产</span>
+          </div>
         </div>
 
       </div>
@@ -3960,11 +4658,10 @@
             <span class="gen-card-year">Shaw Brothers · 乾隆下扬州 · 1978</span>
           </div>
           <div class="gen-card-video-wrapper">
-            <video controls preload="metadata"
+            <iframe src="https://drive.google.com/file/d/1nwfJngmBNOWhxlP43dlw__BVSbozUvMo/preview"
+              allow="autoplay" frameborder="0"
               aria-label="Old Suzhounese everyday speech, Shaw Brothers film 乾隆下扬州 1978">
-              <source src="videos/Pingtan.mp4" type="video/mp4">
-              <p style="padding:20px;color:#fff;font-size:13px;">Your browser does not support this video format. Try Safari or Chrome.</p>
-            </video>
+            </iframe>
           </div>
           <p class="gen-card-desc">The woman in this clip is a <em>Pingtan</em> performer by trade, but what you are hearing is not a staged performance — it is how Suzhou people simply talked. For centuries, Suzhou set the cultural standard for the entire Yangtze Delta: the saying went, <em>"What the people of Suzhou consider elegant, the whole world considers elegant."</em> In this clip, Emperor Qianlong visits Yangzhou and cannot understand the woman — and gets mocked for it by a tavern waiter, while the local Yangzhou dandies watching from the floor cheer and jeer along. The joke lands because understanding Suzhounese was a point of pride across the whole Jiangnan region — not just for Suzhou locals, but for anyone who considered themselves cultured. <em>"A Shandong man eating 麦冬 — doesn't understand a thing."</em> (Pun: 麦冬/mài dōng ≈ 没懂, "understood nothing.")</p>
           <div class="gen-card-attribution">
@@ -3986,11 +4683,10 @@
             <span class="gen-card-year">Shi Bin · Suzhou Television · 2020s</span>
           </div>
           <div class="gen-card-video-wrapper">
-            <video controls preload="metadata"
+            <iframe src="https://drive.google.com/file/d/1ijqq7QPk-4JfNYy44ptFIBChHdrt_FS1/preview"
+              allow="autoplay" frameborder="0"
               aria-label="Shi Bin, Suzhou TV host, speaking Suzhounese about historical wedding customs">
-              <source src="videos/shibin.mp4" type="video/mp4">
-              <p style="padding:20px;color:#fff;font-size:13px;">Your browser does not support this video format. Try Safari or Chrome.</p>
-            </video>
+            </iframe>
           </div>
           <p class="gen-card-desc">Shi Bin (施斌) is a host at Suzhou Television, whose shows are all entirely in Suzhounese — a deliberate and increasingly rare choice. This clip, originally broadcast by Suzhou TV and later uploaded to YouTube, covers Western Zhou dynasty wedding customs. Listen for the same tonal richness as the first clip, but also notice Mandarin vocabulary and rhythms creeping in. This generation grew up bilingual; the dialect survived, but it changed.</p>
           <div class="gen-card-attribution">
@@ -4013,11 +4709,10 @@
             <span class="gen-card-year">Recorded 2024–2025</span>
           </div>
           <div class="gen-card-video-wrapper">
-            <video controls preload="metadata"
+            <iframe src="https://drive.google.com/file/d/1VEWOepHofuIpidr1aB8-9KsHN-I8tV59/preview"
+              allow="autoplay" frameborder="0"
               aria-label="Generation 3 — author's own recording">
-              <source src="videos/genz.mp4" type="video/mp4">
-              <p style="padding:20px;color:#fff;font-size:13px;">Your browser does not support this video format.</p>
-            </video>
+            </iframe>
           </div>
           <p class="gen-card-desc">The author's own voice — part of the generation that grew up hearing Suzhounese from grandparents but schooled entirely in Mandarin. Can understand it, can say some phrases, but the full vocabulary and tonal instinct are gone. Not from lack of interest. From lack of environment.</p>
           <div class="gen-card-attribution">
@@ -4538,6 +5233,61 @@
           <p style="font-size:11px;color:var(--text-secondary);font-family:var(--font-en);margin-top:8px;font-style:italic;">Plus: 4 competing romanization systems with no official standard — annotation inconsistency is structural.</p>
         </div>
 
+        <!-- Card 4: Vowel Inventory -->
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="28" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="8" cy="8" rx="4" ry="5" stroke="#5B8A7D" stroke-width="1.5" fill="none"/>
+              <ellipse cx="20" cy="8" rx="4" ry="5" stroke="#5B8A7D" stroke-width="1.5" fill="none"/>
+              <ellipse cx="14" cy="17" rx="4" ry="4" stroke="#C4954A" stroke-width="1.5" fill="none"/>
+            </svg>
+          </div>
+          <p class="feature-title">Richer Vowels than Mandarin</p>
+          <p class="feature-body">Suzhounese includes rounded front mid vowels like /ø/ — sounds absent from Mandarin entirely. These are the same vowel sounds found in French 'feu' or German 'schön'.</p>
+          <svg viewBox="0 0 120 80" width="120" height="80" aria-label="IPA vowel chart: teal circles mark Wu-distinctive vowels /y/ and /ø/; grey marks Mandarin-shared vowels" role="img" style="margin-top:10px;display:block;">
+            <title>Simplified IPA vowel trapezoid. Teal circles indicate vowels distinctive to Wu/Suzhounese; grey circles indicate vowels shared with Mandarin.</title>
+            <!-- Trapezoid outline -->
+            <polygon points="10,10 110,10 100,75 20,75" fill="none" stroke="#C0A87A" stroke-width="0.8" opacity="0.5"/>
+            <!-- Shared vowels (grey) -->
+            <circle cx="10"  cy="10"  r="5" fill="#C8D8D5" aria-label="/i/ front high"/>
+            <text x="10" y="6" text-anchor="middle" font-size="7" fill="#6A5C40" font-family="Georgia,serif">/i/</text>
+            <circle cx="110" cy="10"  r="5" fill="#C8D8D5" aria-label="/u/ back high"/>
+            <text x="110" y="6" text-anchor="middle" font-size="7" fill="#6A5C40" font-family="Georgia,serif">/u/</text>
+            <circle cx="15"  cy="45"  r="5" fill="#C8D8D5" aria-label="/e/ front mid"/>
+            <text x="15" y="41" text-anchor="middle" font-size="7" fill="#6A5C40" font-family="Georgia,serif">/e/</text>
+            <circle cx="105" cy="45"  r="5" fill="#C8D8D5" aria-label="/o/ back mid"/>
+            <text x="105" y="41" text-anchor="middle" font-size="7" fill="#6A5C40" font-family="Georgia,serif">/o/</text>
+            <circle cx="20"  cy="75"  r="5" fill="#C8D8D5" aria-label="/a/ front low"/>
+            <text x="20" y="71" text-anchor="middle" font-size="7" fill="#6A5C40" font-family="Georgia,serif">/a/</text>
+            <!-- Wu-distinctive vowels (teal) -->
+            <circle cx="10"  cy="22"  r="5" fill="#5B8A7D" aria-label="/y/ front high rounded, Wu-distinctive"/>
+            <text x="10" y="18" text-anchor="middle" font-size="7" fill="#fff" font-family="Georgia,serif">/y/</text>
+            <circle cx="15"  cy="57"  r="5" fill="#5B8A7D" aria-label="/ø/ front mid rounded, Wu-distinctive"/>
+            <text x="15" y="53" text-anchor="middle" font-size="7" fill="#fff" font-family="Georgia,serif">/ø/</text>
+            <!-- Legend -->
+            <circle cx="42" cy="74" r="3.5" fill="#5B8A7D"/>
+            <text x="48" y="77" font-size="7" fill="#6A5C40" font-family="Georgia,serif">Wu-distinctive</text>
+            <circle cx="82" cy="74" r="3.5" fill="#C8D8D5"/>
+            <text x="88" y="77" font-size="7" fill="#6A5C40" font-family="Georgia,serif">Shared</text>
+          </svg>
+        </div>
+
+        <!-- Card 5: Literary Heritage -->
+        <div class="feature-card">
+          <div class="feature-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="#5B8A7D" stroke-width="1.4" fill="none"/>
+            </svg>
+          </div>
+          <p class="feature-title">Foundation of Two UNESCO Arts</p>
+          <p class="feature-body">Kunqu opera (UNESCO 2001) and Pingtan storytelling were built on Suzhou phonology. Wei Liangfu explicitly chose Suzhou accent as Kunqu's phonological standard in the Ming dynasty.</p>
+          <div class="cause-tags" style="margin-top:10px;">
+            <span class="cause-tag">Kunqu 昆曲</span>
+            <span class="cause-tag">Pingtan 评弹</span>
+            <span class="cause-tag">UNESCO 2001</span>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -4604,6 +5354,38 @@
           </tr>
           <tr class="detail-row" id="detail-6">
             <td colspan="2">Chinese characters encode meaning, not sound. Suzhounese has sounds that no standard character represents — speakers improvise, each differently. "煞煞好" (sàsa hǎo) appears in no official dictionary; its characters vary writer to writer. Without a stable orthography there can be no text corpus; without a text corpus there can be no language model; without a language model there can be no input method. The absence of a writing system is not just a cultural gap — it is a hard dependency that blocks every downstream digital tool. No other language at this scale faces this problem so completely.</td>
+          </tr>
+
+          <tr class="expandable" data-detail="detail-7" aria-expanded="false" role="button" tabindex="0">
+            <td>No enumerable solution set <span class="expand-icon" aria-hidden="true">▾</span></td>
+            <td>School curricula, media production, ASR systems, legislation, diaspora networks — the intervention space has no ceiling.</td>
+          </tr>
+          <tr class="detail-row" id="detail-7">
+            <td colspan="2">Unlike engineering problems with discrete solution spaces, Suzhou dialect preservation has an effectively infinite set of potential interventions: curriculum reform, community centers, TTS development, tourism, WeChat campaigns, documentary film, legal protection, artist residencies, diaspora outreach, and countless combinations. No principled method exists for choosing among them or knowing when enough has been tried.</td>
+          </tr>
+
+          <tr class="expandable" data-detail="detail-8" aria-expanded="false" role="button" tabindex="0">
+            <td>Essential uniqueness <span class="expand-icon" aria-hidden="true">▾</span></td>
+            <td>What worked for Cantonese, Hokkien, or Gaelic may fail here. The context is not transferable.</td>
+          </tr>
+          <tr class="detail-row" id="detail-8">
+            <td colspan="2">Suzhou dialect lacks Cantonese's institutional semi-autonomy in Hong Kong, Hokkien's diaspora networks and Taiwan curriculum mandate, Gaelic's EU-framework protections, and Ainu's ethnic-minority legal standing. Every apparently analogous success case differs on the very dimensions that determined its outcome. Imported solutions require such extensive modification that they may no longer be solutions at all.</td>
+          </tr>
+
+          <tr class="expandable" data-detail="detail-9" aria-expanded="false" role="button" tabindex="0">
+            <td>Multiple interconnected causes <span class="expand-icon" aria-hidden="true">▾</span></td>
+            <td>Government policy, economic incentives, urbanization, demographic shift, and parental choice all drive decline simultaneously.</td>
+          </tr>
+          <tr class="detail-row" id="detail-9">
+            <td colspan="2">Six causal streams operate in parallel: (1) Putonghua mandates remove institutional space for dialect; (2) labor markets reward Mandarin and English; (3) migrant demographic influx means dialect speakers are now a minority in Suzhou; (4) social attitudes equate dialect with lower status; (5) parents who speak the dialect actively choose Mandarin for their children; (6) digital platforms are structurally Mandarin-first. Each cause is sufficient to drive decline alone; they are mutually reinforcing.</td>
+          </tr>
+
+          <tr class="expandable" data-detail="detail-10" aria-expanded="false" role="button" tabindex="0">
+            <td>Stakeholder disagreement <span class="expand-icon" aria-hidden="true">▾</span></td>
+            <td>Linguists, community members, government officials, engineers, and educators hold mutually incompatible but internally coherent views.</td>
+          </tr>
+          <tr class="detail-row" id="detail-10">
+            <td colspan="2">Linguists prioritize phonological completeness; communities prioritize living use; government must balance dialect promotion against Putonghua policy; tech companies optimize for data and engagement; educators face curriculum constraints; artists want creative freedom. Each stakeholder's framing of the problem generates a different solution that conflicts with others'. There is no neutral vantage point from which to adjudicate.</td>
           </tr>
         </tbody>
       </table>
@@ -4753,9 +5535,39 @@
         </div>
 
         <div class="tl-item policy">
+          <p class="tl-year">1956年</p>
+          <p class="tl-label-zh">普通话正式确立为国家标准语言<span class="tl-badge policy">政策</span></p>
+          <p class="tl-desc-zh">中华人民共和国政府将北京话定为全国推广的普通话。学校和广播中开始强制使用普通话，苏州话的制度性衰退从此开始。</p>
+        </div>
+
+        <div class="tl-item research">
+          <p class="tl-year">1969年</p>
+          <p class="tl-label-zh">吴语原始语音的首次重构<span class="tl-badge research">研究</span></p>
+          <p class="tl-desc-zh">威廉·哈维·巴拉德发表首个吴语原始音系重构，苏州话成为吴语历史语言学的核心参照。</p>
+        </div>
+
+        <div class="tl-item research">
+          <p class="tl-year">1973年</p>
+          <p class="tl-label-zh">里特尔与韦伯提出"棘手难题"理论框架<span class="tl-badge research">研究</span></p>
+          <p class="tl-desc-zh">《政策科学》杂志发表奠基性论文，为数十年后我们理解方言保护困境提供了精准的理论框架。</p>
+        </div>
+
+        <div class="tl-item research milestone">
+          <p class="tl-year">1984年</p>
+          <p class="tl-label-zh">高峰：约95%的苏州青少年能流利使用苏州话<span class="tl-badge research">研究</span></p>
+          <p class="tl-desc-zh">语言衰退加速前的最后一次文献记录基线。一代人之内，这一比例将跌至8%。</p>
+        </div>
+
+        <div class="tl-item policy">
           <p class="tl-year">1992年</p>
           <p class="tl-label-zh">上海禁止学校使用方言教学<span class="tl-badge policy">政策</span></p>
           <p class="tl-desc-zh">标志性政策转折：上海明确规定校园内禁用吴语。这一决定深刻影响了整个吴语区的下一代，包括苏州。</p>
+        </div>
+
+        <div class="tl-item policy milestone">
+          <p class="tl-year">2001年</p>
+          <p class="tl-label-zh">昆曲列入联合国教科文组织非遗名录<span class="tl-badge policy">政策</span></p>
+          <p class="tl-desc-zh">联合国教科文组织将昆曲列为"人类口述和非物质遗产代表作"，昆曲在音韵上对苏州话的依赖首次获得国际正式认可。</p>
         </div>
 
         <div class="tl-item community">
@@ -4771,14 +5583,32 @@
         </div>
 
         <div class="tl-item research">
+          <p class="tl-year">2006–2007年</p>
+          <p class="tl-label-zh">《中国语言地图集》：930个调查点<span class="tl-badge research">研究</span></p>
+          <p class="tl-desc-zh">中国历史上最全面的方言调查，吴语以510幅方言地图记录于三卷本中，成为后续保护工作的核心参照数据。</p>
+        </div>
+
+        <div class="tl-item danger">
+          <p class="tl-year">2008年</p>
+          <p class="tl-label-zh">流利度崩塌：青少年中从95%跌至8%<span class="tl-badge danger">危机</span></p>
+          <p class="tl-desc-zh">研究记录了有史以来最剧烈的代际断层——仅仅一代人，苏州话便从几乎全民流利变为年轻人中几近消亡。</p>
+        </div>
+
+        <div class="tl-item research">
           <p class="tl-year">2010年</p>
           <p class="tl-label-zh">江苏地方口头文化音频数据库启动<span class="tl-badge research">研究</span></p>
           <p class="tl-desc-zh">江苏省语言文字工作委员会开始系统收录评弹、昆曲、苏州弹词等非遗表演录音，建立专项数据库。</p>
         </div>
 
+        <div class="tl-item community">
+          <p class="tl-year">2010年</p>
+          <p class="tl-label-zh">广东数千人抗议：粤语保卫战<span class="tl-badge community">社区</span></p>
+          <p class="tl-desc-zh">粤语使用者成功抵制普通话独播提案，表明方言社区可以发挥政治行动力——同时也揭示苏州话社区在这方面几乎没有类似的动员能力。</p>
+        </div>
+
         <div class="tl-item policy milestone">
           <p class="tl-year">2015年</p>
-          <p class="tl-label-zh">中国语言资源保护工程启动<span class="tl-badge policy">政策</span></p>
+          <p class="tl-label-zh">中国语言资源保护工程启动<span class="tl-badge policy">政策</span><span class="tl-badge tech">技术</span></p>
           <p class="tl-desc-zh">教育部与国家语言文字工作委员会共同发起，覆盖1712个调查地点，收录逾千万条语料——目前全球规模最大的语言资源保护项目。苏州话录音纳入国家数据库。</p>
         </div>
 
@@ -4792,6 +5622,12 @@
           <p class="tl-year">2024年</p>
           <p class="tl-label-zh">PASSCo保护框架发表；苏州博物馆AI方言展<span class="tl-badge research">研究</span></p>
           <p class="tl-desc-zh">学术界首次系统梳理苏州方言保护的多方利益结构。同年，苏州博物馆推出"回响·AI方言艺术展"，让观众通过语音交互体验苏州话。</p>
+        </div>
+
+        <div class="tl-item tech">
+          <p class="tl-year">2024年</p>
+          <p class="tl-label-zh">百灵TTS：方言语音合成系统<span class="tl-badge tech">技术</span></p>
+          <p class="tl-desc-zh">首个有公开文献的多方言中文语音合成系统，但未涵盖苏州话——既展示了技术可行性，也揭示了吴语至今尚存的空白。</p>
         </div>
 
         <div class="tl-item tech milestone">
@@ -4816,9 +5652,39 @@
         </div>
 
         <div class="tl-item policy">
+          <p class="tl-year">1956</p>
+          <p class="tl-label">Putonghua Declared National Standard<span class="tl-badge policy">Policy</span></p>
+          <p class="tl-desc">The PRC government designates Beijing pronunciation as national standard. Mandatory use in schools and broadcasting begins. Suzhou dialect begins its institutional marginalization.</p>
+        </div>
+
+        <div class="tl-item research">
+          <p class="tl-year">1969</p>
+          <p class="tl-label">First Proto-Wu Reconstruction (Ballard)<span class="tl-badge research">Research</span></p>
+          <p class="tl-desc">William Harvey Ballard publishes the first academic reconstruction of Proto-Wu, establishing Suzhou as a central reference point for Wu linguistic history.</p>
+        </div>
+
+        <div class="tl-item research">
+          <p class="tl-year">1973</p>
+          <p class="tl-label">Rittel &amp; Webber: 'Wicked Problems' Framework<span class="tl-badge research">Research</span></p>
+          <p class="tl-desc">Policy Sciences journal publishes the seminal framework that will, decades later, explain precisely why dialect preservation resists solution.</p>
+        </div>
+
+        <div class="tl-item research milestone">
+          <p class="tl-year">1984</p>
+          <p class="tl-label">Peak: ~95% of Suzhou Youth Speak the Dialect<span class="tl-badge research">Research</span></p>
+          <p class="tl-desc">Last documented baseline before accelerated decline. Within one generation, this figure will fall to 8%.</p>
+        </div>
+
+        <div class="tl-item policy">
           <p class="tl-year">1992</p>
           <p class="tl-label">Shanghai bans dialect instruction in schools<span class="tl-badge policy">Policy</span></p>
           <p class="tl-desc">A landmark policy: Wu Chinese explicitly prohibited in Shanghai classrooms. Profoundly affects the next generation across the entire Wu dialect zone, including Suzhou.</p>
+        </div>
+
+        <div class="tl-item policy milestone">
+          <p class="tl-year">2001</p>
+          <p class="tl-label">Kunqu Opera: UNESCO Masterpiece<span class="tl-badge policy">Policy</span></p>
+          <p class="tl-desc">UNESCO recognizes Kunqu as 'Masterpiece of the Oral and Intangible Heritage of Humanity.' The art form's phonological dependence on Suzhou dialect is formally acknowledged internationally.</p>
         </div>
 
         <div class="tl-item community">
@@ -4834,14 +5700,32 @@
         </div>
 
         <div class="tl-item research">
+          <p class="tl-year">2006–2007</p>
+          <p class="tl-label">Linguistic Atlas of Chinese Dialects: 930 Sites<span class="tl-badge research">Research</span></p>
+          <p class="tl-desc">The most comprehensive dialect survey in Chinese history. Wu varieties surveyed across 3 volumes with 510 maps. Produces baseline data that all subsequent preservation work references.</p>
+        </div>
+
+        <div class="tl-item danger">
+          <p class="tl-year">2008</p>
+          <p class="tl-label">Fluency Collapses: 95% → 8% Among Youth<span class="tl-badge danger">Danger</span></p>
+          <p class="tl-desc">Research documents the sharpest intergenerational decline on record. One generation separates near-universal fluency from near-extinction among the young.</p>
+        </div>
+
+        <div class="tl-item research">
           <p class="tl-year">2010</p>
           <p class="tl-label">Jiangsu Provincial Audio Database launched<span class="tl-badge research">Research</span></p>
           <p class="tl-desc">Jiangsu Language Commission begins systematic recording of Pingtan, Kunqu, and Suzhou Opera performances — a specialized heritage archive focused on performance, distinct from conversational documentation.</p>
         </div>
 
+        <div class="tl-item community">
+          <p class="tl-year">2010</p>
+          <p class="tl-label">Guangdong Protests: Thousands Defend Cantonese<span class="tl-badge community">Community</span></p>
+          <p class="tl-desc">Cantonese speakers successfully resist Putonghua-only broadcasting mandate. Signals that dialect communities can exercise political agency — and that Suzhou has no comparable mobilization capacity.</p>
+        </div>
+
         <div class="tl-item policy milestone">
           <p class="tl-year">2015</p>
-          <p class="tl-label">China Language Resources Protection Project (CLRPP) launched<sup class="cite"><a href="#ref-4">[4]</a></sup><span class="tl-badge policy">Policy</span></p>
+          <p class="tl-label">China Language Resources Protection Project (CLRPP) launched<sup class="cite"><a href="#ref-4">[4]</a></sup><span class="tl-badge policy">Policy</span><span class="tl-badge tech">Tech</span></p>
           <p class="tl-desc">World's largest language documentation project: 1,712 survey sites, 10M+ entries for 123 dialects. Suzhounese recordings enter the national database. Primary output is documentation — not community revitalization.</p>
         </div>
 
@@ -4855,6 +5739,12 @@
           <p class="tl-year">2024</p>
           <p class="tl-label">PASSCo framework published; Suzhou Museum AI dialect exhibition<span class="tl-badge research">Research</span></p>
           <p class="tl-desc">First systematic academic analysis of the multi-stakeholder structure of Suzhou dialect protection. The Suzhou Museum hosts an AI voice-interactive dialect art exhibition.</p>
+        </div>
+
+        <div class="tl-item tech">
+          <p class="tl-year">2024</p>
+          <p class="tl-label">Bailing-TTS: Dialectal Speech Synthesis<span class="tl-badge tech">Tech</span></p>
+          <p class="tl-desc">First publicly documented TTS system with multi-dialect Chinese support. Suzhou not included. Demonstrates both the technical feasibility and the gap that remains for Wu.</p>
         </div>
 
         <div class="tl-item tech milestone">
@@ -4890,6 +5780,9 @@
         <br><br>
         棘手难题没有"解法"，只有更好或更差的应对方式。而最好的应对方式，往往从最小的、最私人的行动开始。
       </p>
+      <p class="takehome-body-zh lang-zh" style="margin-top: 20px;">
+        这个页面做不到——任何页面都做不到——解决这个难题。但它能做到的，是让问题变得清晰可见：为研究者、社区成员、政策制定者和技术人员提供一套共同的语言，说明这究竟是一个怎样的棘手难题，以及为什么善意的努力总是难以企及目标。
+      </p>
     </div>
 
     <!-- English version -->
@@ -4906,6 +5799,12 @@
         The most consequential preservation decisions will not be made in research labs. They will be made at kitchen tables, in the small daily choices parents make about which language to speak to their children. Your work creates infrastructure. Vitality has to come from somewhere else.
         <br><br>
         The shared interests — the five things every stakeholder agrees on — are the only stable ground. They are where intervention design should begin.
+      </p>
+      <p class="takehome-body-en lang-en" style="margin-top: 20px;">
+        What this page cannot do — and no page can — is solve the problem.
+        What it can do is make the problem legible: give researchers, community members,
+        policymakers, and technologists a shared vocabulary for what makes this wicked,
+        and why good-faith efforts keep falling short of the goal.
       </p>
     </div>
 
@@ -4951,6 +5850,17 @@
             <option>听得懂，说不来</option>
             <option>正在学习</option>
           </select>
+          <select class="portal-select portal-input-zh" name="variety" required aria-label="方言品种">
+            <option value="" disabled selected>请选择您的吴语品种</option>
+            <option value="suzhou-city">苏州市区</option>
+            <option value="suzhou-changshu">常熟</option>
+            <option value="suzhou-zhangjiagang">张家港</option>
+            <option value="suzhou-kunshan">昆山</option>
+            <option value="suzhou-wujiang">吴江</option>
+            <option value="suzhou-taicang">太仓</option>
+            <option value="shanghai">上海</option>
+            <option value="other-wu">其他吴语</option>
+          </select>
           <label class="portal-file-label">
             <span class="portal-file-icon" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4995,6 +5905,17 @@
             <option>35–50</option>
             <option>50–65</option>
             <option>65+</option>
+          </select>
+          <select class="portal-select" name="variety" required aria-label="Dialect variety">
+            <option value="" disabled selected>Select your Wu variety</option>
+            <option value="suzhou-city">Suzhou City (苏州市区)</option>
+            <option value="suzhou-changshu">Changshu (常熟)</option>
+            <option value="suzhou-zhangjiagang">Zhangjiagang (张家港)</option>
+            <option value="suzhou-kunshan">Kunshan (昆山)</option>
+            <option value="suzhou-wujiang">Wujiang (吴江)</option>
+            <option value="suzhou-taicang">Taicang (太仓)</option>
+            <option value="shanghai">Shanghai (上海)</option>
+            <option value="other-wu">Other Wu variety</option>
           </select>
           <label class="portal-file-label">
             <span class="portal-file-icon" aria-hidden="true">
