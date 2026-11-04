@@ -29,7 +29,7 @@ const SITE = {
   title: '麻瓜的玄学笔记',
   subtitle: '宗教、玄学，以及读经典时的笔记',
   // Shown in the footer. Set to '' to omit.
-  footer: '',
+  footer: '神经兮兮大仓鼠',
   lang: 'zh-CN',
 };
 
