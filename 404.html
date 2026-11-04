@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found</title>
+<style>
+  :root {
+    --bg: #E9DEC0;
+    --surface: #F2E8CC;
+    --ink: #1E1A12;
+    --muted: #6A5C40;
+    --rule: #C0A87A;
+    --accent: #4A7A6D;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1C1810;
+      --surface: #262117;
+      --ink: #DDD0AB;
+      --muted: #A4946E;
+      --rule: #4A4130;
+      --accent: #7A9E98;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 2rem 16px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Iowan Old Style", Palatino, Georgia, "Songti SC", serif;
+    line-height: 1.7;
+  }
+  main { max-width: 26rem; text-align: center; }
+  .code {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+  }
+  h1 { font-size: 1.5rem; font-weight: 500; margin: 1rem 0 0; letter-spacing: 0.01em; }
+  p { color: var(--muted); margin: 1rem 0 2rem; }
+  hr { border: 0; height: 1px; background: var(--rule); width: 3rem; margin: 2rem auto; }
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 1px;
+  }
+  a:hover { color: var(--ink); }
+  nav { display: flex; gap: 1.5rem; justify-content: center; font-size: 0.9375rem; }
+</style>
+</head>
+<body>
+<main>
+  <div class="code">404</div>
+  <h1>Page not found</h1>
+  <p>That address doesn't lead anywhere.</p>
+  <hr>
+  <nav>
+    <a href="/">Suzhou dialect</a>
+    <a href="/blog/">Notes</a>
+  </nav>
+</main>
+</body>
+</html>

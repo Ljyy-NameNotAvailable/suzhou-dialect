@@ -118,7 +118,6 @@ a:hover { color: var(--ink); }
   margin: 0.75rem 0 0;
   color: var(--muted);
   font-size: 0.9375rem;
-  font-style: italic;
   line-height: 1.6;
 }
 
@@ -155,7 +154,6 @@ a:hover { color: var(--ink); }
   margin-top: 0.3rem;
   color: var(--faint);
   font-size: 0.875rem;
-  font-style: italic;
 }
 
 .post-item time {

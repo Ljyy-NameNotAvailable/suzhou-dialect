@@ -3,3 +3,8 @@
 
 # Videos (too large for GitHub — host separately)
 videos/
+
+# Blog: public post sources ARE committed (blog-src/posts/) so drafts get git
+# history. Only the encrypted posts' plaintext is kept out of the repo.
+blog-src/private/
+blog-src/.slug-salt
