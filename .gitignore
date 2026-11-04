@@ -8,3 +8,6 @@ videos/
 # history. Only the encrypted posts' plaintext is kept out of the repo.
 blog-src/private/
 blog-src/.slug-salt
+
+# Full pre-rewrite git backup (restore: git clone .git-backup-pre-rewrite.bundle)
+.git-backup-pre-rewrite.bundle
