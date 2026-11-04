@@ -91,6 +91,10 @@ tracks, so nothing new can sneak in) plus `git add blog blog-src` for genuinely
 new posts. `.gitignore` also blocks `/Screenshot*.png` and `/*.docx` at the
 root as a second line of defence.
 
+The trade-off: a brand-new file *outside* `blog/` and `blog-src/` (a new script
+in `tools/`, say) won't be picked up. Add those once by hand with
+`git add <path>`; after that `git add -u` tracks them.
+
 ### Doing it by hand
 
 ```sh
