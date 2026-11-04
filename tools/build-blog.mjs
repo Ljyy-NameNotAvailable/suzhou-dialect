@@ -309,10 +309,6 @@ async function loadPosts(salt) {
   const posts = [];
   await readPostDir(PUB_DIR, 'public', salt, posts);
   await readPostDir(PRIV_DIR, 'private', salt, posts);
-  if (posts.length === 0) {
-    die(`no .md files in ${path.relative(ROOT, PUB_DIR)} or `
-      + `${path.relative(ROOT, PRIV_DIR)}`);
-  }
   return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
@@ -447,6 +443,11 @@ function indexPage(posts, key, salt) {
   const pub = posts.filter((p) => p.visibility === 'public');
   const priv = posts.filter((p) => p.visibility === 'private');
 
+  const emptyState = (pub.length + priv.length) === 0
+    ? '<p class="empty-note">还没有文章。在 blog-src/posts/ 里新建一个 .md 文件，'
+      + '然后运行 tools/publish.sh。</p>'
+    : '';
+
   const pubList = pub.length ? `<ul class="post-list">${pub.map((p) => `
     <li class="post-item">
       <a class="post-link" href="/blog/posts/${p.slug}.html">
@@ -481,6 +482,7 @@ function indexPage(posts, key, salt) {
   const body = `<div class="wrap">
 ${siteHeader(false)}
 <main>
+  ${emptyState}
   ${pubList}
   ${lockedSection}
 </main>

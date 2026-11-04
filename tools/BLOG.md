@@ -56,15 +56,50 @@ Markdown gets headings, **bold**, *italic*, blockquotes, lists, tables, code,
 images, and footnotes (`[^1]` in the text, `[^1]: note` on its own line). No
 length limit; three or more `##`/`###` headings generate a table of contents.
 
-## Building and publishing
+## Day-to-day: write, edit, delete
+
+All three are the same loop. You only ever touch `blog-src/posts/`; `blog/` is
+wiped and regenerated on every build, so never edit anything in it.
+
+| | What you do |
+|---|---|
+| New post | create `blog-src/posts/my-post.md` |
+| Edit | edit the `.md` |
+| Delete | `rm blog-src/posts/my-post.md` |
+
+Then publish:
+
+```sh
+./tools/publish.sh "新文章：论宗教"
+```
+
+That builds, shows you exactly what it's about to publish, commits and pushes.
+Live in about a minute. With no message it commits as "blog: update", and if
+nothing changed it says so and stops.
+
+The filename is the URL: `my-post.md` becomes
+`suzhouhamster.com/blog/posts/my-post.html`. Renaming breaks existing links.
+
+An empty `blog-src/posts/` is fine — the index just says there are no posts
+yet.
+
+### Why the script doesn't use `git add -A`
+
+The repo root is a public website. A bare `git add -A` would sweep up anything
+sitting loose there. `publish.sh` uses `git add -u` (only files git already
+tracks, so nothing new can sneak in) plus `git add blog blog-src` for genuinely
+new posts. `.gitignore` also blocks `/Screenshot*.png` and `/*.docx` at the
+root as a second line of defence.
+
+### Doing it by hand
 
 ```sh
 node tools/build-blog.mjs
-git add blog/ blog-src/posts/ && git commit -m "blog: new post" && git push
+git add -u && git add blog blog-src
+git commit -m "blog: new post" && git push
 ```
 
-With no locked posts, the build asks for nothing. GitHub Pages republishes in
-about a minute.
+With no locked posts, the build asks for nothing.
 
 ### Flags
 

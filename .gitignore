@@ -11,3 +11,12 @@ blog-src/.slug-salt
 
 # Full pre-rewrite git backup (restore: git clone .git-backup-pre-rewrite.bundle)
 .git-backup-pre-rewrite.bundle
+
+# Loose working files dropped in the repo ROOT (screenshots, documents). These
+# are never part of the site, and this repo is public. Anchored with a leading
+# slash so a deliberate images/Screenshot-*.png still works.
+/Screenshot*.png
+/*.docx
+/*.pages
+/*.key
+/*.numbers
